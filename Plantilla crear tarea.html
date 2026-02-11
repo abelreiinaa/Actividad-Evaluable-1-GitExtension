@@ -187,6 +187,23 @@
 
     // Rama "eliminar"
     
+    function deleteSelected() {
+      if (selectedId === null) {
+        setStatus("Selecciona una tarea para eliminarla.", "danger");
+        return;
+      }
+      tasks = tasks.length===before){
+        //por si selectid apunta a una tarea que ya no existe
+        setStatus("no se ha encontrado la tarea seleccionada para eliminada.", "danger");
+      selectedId = null;
+      setStatus("Tarea eliminada correctamente", "ok");
+      render();
+      return;
+    }
+    setStatus(`Tarea eliminada (id ${selectedId})`, "ok");
+    selectedId = null;
+    render();
+   }
     // Rama "editar"
     function editSelected() {
       
