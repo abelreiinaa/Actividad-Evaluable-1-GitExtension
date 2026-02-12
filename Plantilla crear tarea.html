@@ -206,8 +206,37 @@
    }
     // Rama "editar"
     function editSelected() {
-      
-      
+      if (selectedId === null) { 
+        setStatus("Selecciona una tarea para editarla.", "danger"); 
+        return; 
+      } 
+      const current = tasks.find(t => t.id === selectedId);
+       if (!current) { 
+setStatus("no se encontró la tarea seleccionada para editar.","danger");
+selectedId = null;
+render();
+ return; 
+}
+// puedes editar usando el input si tiene texto; si no, usamos prompt 
+       const inputtext = readInputTrimmed(); 
+       let newtext = inputtext;
+
+       if (!inputtext) {
+         newText = prompt("nuevo texto para la tarea:",current.text);
+if (newText === null) { 
+  setStatus("Edición cancelada.", "muted"); 
+  return; 
+} 
+newText = newText.trim();
+ } 
+ if (!newText) {
+  setStatus("El texto de la tarea no puede estar vacío.", "danger");
+  return; 
+      }
+      current.text = newtext; 
+clearInput();
+ setStatus("Tarea editada correctamente.", "ok"); 
+ render();  
     }
 
     // =========================
