@@ -185,58 +185,61 @@
     render();
   }
 
-    // Rama "eliminar"
-    
+   // Rama "eliminar"
     function deleteSelected() {
       if (selectedId === null) {
         setStatus("Selecciona una tarea para eliminarla.", "danger");
         return;
       }
-      tasks = tasks.length===before){
-        //por si selectid apunta a una tarea que ya no existe
-        setStatus("no se ha encontrado la tarea seleccionada para eliminada.", "danger");
-      selectedId = null;
-      setStatus("Tarea eliminada correctamente", "ok");
+      
+      // Filtramos la lista para quitar la tarea con el ID seleccionado
+      tasks = tasks.filter(t => t.id !== selectedId);
+      
+      setStatus(`Tarea eliminada (ID ${selectedId})`, "ok");
+      selectedId = null; // Limpiamos la selección
       render();
-      return;
     }
-    setStatus(`Tarea eliminada (id ${selectedId})`, "ok");
-    selectedId = null;
-    render();
-   }
+
     // Rama "editar"
     function editSelected() {
       if (selectedId === null) { 
         setStatus("Selecciona una tarea para editarla.", "danger"); 
         return; 
       } 
-      const current = tasks.find(t => t.id === selectedId);
-       if (!current) { 
-setStatus("no se encontró la tarea seleccionada para editar.","danger");
-selectedId = null;
-render();
- return; 
-}
-// puedes editar usando el input si tiene texto; si no, usamos prompt 
-       const inputtext = readInputTrimmed(); 
-       let newtext = inputtext;
 
-       if (!inputtext) {
-         newText = prompt("nuevo texto para la tarea:",current.text);
-if (newText === null) { 
-  setStatus("Edición cancelada.", "muted"); 
-  return; 
-} 
-newText = newText.trim();
- } 
- if (!newText) {
-  setStatus("El texto de la tarea no puede estar vacío.", "danger");
-  return; 
+      const current = tasks.find(t => t.id === selectedId);
+      if (!current) { 
+        setStatus("No se encontró la tarea seleccionada.", "danger");
+        selectedId = null;
+        render();
+        return; 
       }
-      current.text = newtext; 
-clearInput();
- setStatus("Tarea editada correctamente.", "ok"); 
- render();  
+
+      const inputtext = readInputTrimmed(); 
+      let newText = "";
+
+      if (!inputtext) {
+        // Si el input está vacío, usamos un prompt
+        const promptText = prompt("Nuevo texto para la tarea:", current.text);
+        if (promptText === null) { 
+          setStatus("Edición cancelada.", "muted"); 
+          return; 
+        } 
+        newText = promptText.trim();
+      } else {
+        // Si hay texto en el input, usamos ese
+        newText = inputtext;
+      }
+
+      if (!newText) {
+        setStatus("El texto de la tarea no puede estar vacío.", "danger");
+        return; 
+      }
+
+      current.text = newText; 
+      clearInput();
+      setStatus("Tarea editada correctamente.", "ok"); 
+      render();   
     }
 
     // =========================
